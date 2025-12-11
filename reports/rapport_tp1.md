@@ -10,13 +10,13 @@ Après installation de Docker Desktop et exécution :
 
 docker run hello-world
 
-![alt text](image.png)
+![alt text](image.png)  
 Docker a correctement lancé un conteneur test.
 
 La commande :
 
 docker ps -a
-![alt text](image-1.png)
+![alt text](image-1.png)  
 
 affiche tous les conteneurs, y compris ceux arrêtés.
 #### Exercice 2: Premiers pas avec Docker : images et coteneurs
@@ -31,18 +31,18 @@ Manipulations simples avec Alpine
 Commande exécutée :  
 docker run alpine echo "Bonjour depuis un conteneur Alpine"
 
-![alt text](image-2.png)
+![alt text](image-2.png)  
 Après l’exécution de la commande, Docker crée un conteneur basé sur l’image Alpine, exécute la commande echo qui affiche le message dans le terminal, puis le conteneur s’arrête automatiquement car le programme est terminé. Le conteneur ne reste pas actif.
 
 La commande :
 
 docker ps -a
 
-![alt text](image-3.png)
+![alt text](image-3.png)  
 
 Le conteneur Alpine apparaît avec le statut Exited (0), ce qui signifie que le programme qu’il exécutait s’est terminé normalement. Comme la commande echo s’est finie immédiatement, le conteneur s’est arrêté automatiquement après l’affichage du message.
 
-![alt text](image-4.png)
+![alt text](image-4.png)  
 En mode interactif, le conteneur permet d’utiliser un terminal.  
 La commande ls affiche le contenu du système de fichiers minimal du conteneur.  
 La commande uname -a montre que le conteneur s’exécute sous un noyau Linux.  
@@ -70,7 +70,7 @@ CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 
 docker build -t simple-api .
 
-![alt text](image-5.png)
+![alt text](image-5.png)  
 
 #### Exercice 4: Executer l'API FastAPI dans un conteneur Docker
 
@@ -78,7 +78,7 @@ docker build -t simple-api .
 ##### Etape 1: Lancement
 docker run -p 8000:8000 simple-api
 
-![alt text](image-6.png)
+![alt text](image-6.png)  
 
 L’option -p 8000:8000 sert à faire un mapping de ports entre la machine hôte et le conteneur.
 Le premier 8000 correspond au port de la machine hôte (localhost), et le second 8000 au port exposé dans le conteneur.
@@ -86,11 +86,11 @@ Grâce à ce mapping, lorsque j’accède à http://localhost:8000 depuis mon na
 ##### Etape 2 : Test
 Réponse dans le navigateur : http://localhost:8000/health
 
-![alt text](image-7.png)
+![alt text](image-7.png)   
 
 ##### Etape 3 : observation
 
-![alt text](image-8.png)
+![alt text](image-8.png)  
 
 docker ps montre que le conteneur basé sur l’image simple-api est en cours d’exécution.
 On peut y lire :
@@ -98,7 +98,7 @@ On peut y lire :
 •	Nom du conteneur : par exemple interesting_tesla
 •	Ports mappés : 0.0.0.0:8000->8000/tcp, ce qui signifie que le port 8000 de la machine hôte est redirigé vers le port 8000 du conteneur.
 ##### Etape 4: 
-![alt text](image-9.png)
+![alt text](image-9.png)  
 
 
 #### Exercice 5: Demarer un mini-système 
@@ -112,22 +112,22 @@ On peut y lire :
 
 ##### Etape 2: Fichier docker-compose.yml
 
-![alt text](image-10.png)
+![alt text](image-10.png)  
 
 ##### Etape 3: 
 
-![alt text](image-12.png)
+![alt text](image-12.png)  
 
-![alt text](image-11.png)
+![alt text](image-11.png)  
 
 
 ##### Etape 4: Test 
 curl http://localhost:8000/health
 
-![alt text](image-13.png)
+![alt text](image-13.png)  
 
 ##### Etape 5: Arrêter les services
- ![alt text](image-14.png)
+ ![alt text](image-14.png)  
 
  La commande « docker compose down » 
 arrête et supprime tous les conteneurs créés par le fichier docker-compose.yml (ainsi que le réseau associé).  
@@ -135,7 +135,7 @@ A l’inverse, la commande « docker stop <id_du_conteneur> » ne fait qu’arr�
  Le conteneur reste visible dans docker ps -a et peut être relancé ultérieurement avec docker start.  
 #### Exercice 6: 
 ##### Etape 1:se connecter au conteneur Postgresql
-![alt text](image-15.png)
+![alt text](image-15.png)  
 •  docker compose exec : exécute une commande dans un conteneur géré par Docker Compose.
 •  db : nom du service/contener défini dans docker-compose.yml pour PostgreSQL.
 •  psql : client en ligne de commande de PostgreSQL.
@@ -143,7 +143,7 @@ A l’inverse, la commande « docker stop <id_du_conteneur> » ne fait qu’arr�
 •  -d demo : précise la base de données cible (root).
 
 ##### Etape 2:
-![alt text](image-16.png)
+![alt text](image-16.png)  
 ##### Etape 3:
 Dans l’architecture Docker Compose, un autre service (comme l’API FastAPI) peut se connecter à la base PostgreSQL en utilisant les informations suivantes :
 •	Hostname : db (le nom du service défini dans docker-compose.yml, résolu automatiquement par Docker).
@@ -154,14 +154,14 @@ Dans l’architecture Docker Compose, un autre service (comme l’API FastAPI) p
 
 #### Execice 7: 
 ##### Etape 1:
-![alt text](image-17.png)
+![alt text](image-17.png)  
 
 *	Au démarrage de l’API, on voit les messages du serveur Uvicorn, par exemple le chargement de l’application, l’host et le port utilisés.
 *	Lorsqu’une requête /health est reçue, une ligne de log supplémentaire apparaît, indiquant généralement la méthode HTTP, le chemin et le code de réponse
 *	Ces logs permettent de vérifier que l’API démarre bien et que les requêtes sont effectivement reçues et traitées.
 
 ##### Etape 2:
-![alt text](image-18.png)
+![alt text](image-18.png)  
 La commande :
 docker compose exec api sh
 ouvre un shell sh dans le conteneur du service api.
@@ -176,13 +176,13 @@ Un redémarrage peut être utile dans plusieurs situations :
 *	lorsqu’un service est bloqué ou ne répond plus correctement ;
 *	pour appliquer certaines modifications d’environnement sans redémarrer toute la stack Docker Compose.
 
-![alt text](image-19.png)
+![alt text](image-19.png)  
 
 ##### Etape 4:
 
-![alt text](image-20.png)
+![alt text](image-20.png)  
 
-![alt text](image-21.png)
+![alt text](image-21.png)  
 
 Pour simuler un problème, j’ai volontairement introduit une erreur dans app.py en renommant l’objet FastAPI app en appi, alors que le serveur Uvicorn est lancé avec :
 uvicorn app:app  
@@ -199,9 +199,9 @@ puis en reconstruisant l’image et en relançant Docker Compose, le service dé
 
 
 ##### Etape 5:
-![alt text](image-22.png)
+![alt text](image-22.png)  
 
-![alt text](image-23.png)
+![alt text](image-23.png)  
 
 Il est utile de nettoyer régulièrement son environnement Docker car :
 *	les builds successifs créent beaucoup d’images intermédiaires ;
