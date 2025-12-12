@@ -118,8 +118,13 @@ Le champ `as_of` permet de conserver une version temporelle des données (une li
 
 ![alt text](image-36.png)
 
-![alt text](image-38.png)
+![alt text](image-38.png)  
 
+7043 enregistrements ont été observés pour la date du 31 janvier 2024, ainsi que pour la date du 29 février 2024.
+Ces résultats indiquent que le snapshot a bien été matérialisé pour les deux périodes, avec une insertion correcte des lignes dans la table subscriptions_profile_snapshots pour les valeurs as_of = '2024-01-31' et as_of = '2024-02-29'.  
+
+La présence de 7043 lignes pour chaque date signifie que la procédure de snapshot a correctement capturé l’état de la table subscriptions lors de l’exécution du flow d’ingestion pour chacun des deux mois.  
+Une ligne par utilisateur a ainsi été stockée pour chaque date de référence (as_of), conformément au mécanisme de suivi temporel mis en place.
 
 #### Question 5.c:
 ##### Synthèse du pipeline
