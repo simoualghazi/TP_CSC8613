@@ -229,20 +229,25 @@ def run_evidently(reference_df: pd.DataFrame, current_df: pd.DataFrame, as_of_re
         "drift_share": float(drift_share),
     }
 
+from train_and_compare_flow import train_and_compare_flow
+
 @task
-def decide_action(as_of_ref: str, as_of_cur: str, drift_share: float, target_drift: float, threshold: float = 0.3) -> str:
+def decide_action(as_of_ref: str, as_of_cur: str, drift_share: float, target_drift: float, threshold: float = 0.02) -> str:
     """
-    Décision simple : si drift_share dépasse threshold, on simule un déclenchement de retrain.
+    Si drift_share dépasse threshold : on lance train_and_compare_flow(as_of=as_of_cur).
     """
     if drift_share >= threshold:
+        decision = train_and_compare_flow(as_of=as_of_cur, seed=42, delta=0.01)
         return (
-            f"RETRAINING_TRIGGERED (SIMULÉ) drift_share={drift_share:.2f} >= {threshold:.2f} "
-            f"(target_drift={target_drift if target_drift == target_drift else 'NaN'})"
+            f"RETRAINING_TRIGGERED drift_share={drift_share:.2f} >= {threshold:.2f} "
+            f"(target_drift={target_drift if target_drift == target_drift else 'NaN'}) -> {decision}"
         )
+
     return (
         f"NO_ACTION drift_share={drift_share:.2f} < {threshold:.2f} "
         f"(target_drift={target_drift if target_drift == target_drift else 'NaN'})"
     )
+
 
 # ----------------------------
 # Prefect flow
@@ -251,7 +256,7 @@ def decide_action(as_of_ref: str, as_of_cur: str, drift_share: float, target_dri
 def monitor_month_flow(
     as_of_ref: str = AS_OF_REF_DEFAULT,
     as_of_cur: str = AS_OF_CUR_DEFAULT,
-    threshold: float = 0.3,
+    threshold: float = 0.02,  
 ):
     ref_df = build_dataset(as_of_ref)
     cur_df = build_dataset(as_of_cur)
